@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible">
+    <title>Map demo</title>
+    <script src="static/js/jquery-3.3.1.min.js"></script>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <script src="static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="static/css/ol.css" type="text/css">
+    <script src="static/js/ol.js"></script>
+    <!-- <script src="static/js/ol-debug.js"></script> -->
+    <script src="static/js/basic-map.js"></script>
+    <script src="static/js/customized-map.js"></script>
+    <style type="text/css">
+        .simple-button {
+            border: none;
+            background-color: transparent
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="mapDiv" style="position:absolute;left:0px;right:0px;bottom:0px;top:0px;"></div>
+    <div style="position:absolute;left:50px;top:10px;" class="form-inline">
+        <div style="margin:5px">
+            <label id="lngLabel">经度: </label> <input id="lngInput" class="form-control">&nbsp;
+            <label id="latLabel">纬度: </label> <input id="latInput" class="form-control">&nbsp;
+            <label id="zoomLabel">缩放级: </label> <input id="levelInput" class="form-control">&nbsp;
+            <button id="moveButton" class="btn btn-primary">移动到</button>&nbsp;
+            <input id="labelCheckBox" type="checkbox" checked><label id="annotationLabel">注记</label>&nbsp;
+            <button id="switchBackgroundLayerButton" class="simple-button">[切换为影像]</button>
+        </div>
+    </div>
+    <div style="position: absolute;bottom:10px;right:10px;background-color:rgba(40,96,144,0.6); border-radius:3px">
+        <div style="margin:5px;color:white">[
+            <x id="pointerX"></x>
+            ,
+            <y id="pointerY"></y>
+            ]
+        </div>
+    </div>
+
+
+    <script>
+        var lngInput = document.getElementById("lngInput");
+        var latInput = document.getElementById("latInput");
+        var levelInput = document.getElementById("levelInput");
+        var moveButton = document.getElementById("moveButton");
+        var labelCheckBox = document.getElementById("labelCheckBox");
+        var switchBackgroundLayerButton = document.getElementById("switchBackgroundLayerButton");
+
+        var map = new CustomizedMap();
+        map.setTiandituWGS84Layers("00c1b6f5154a797086ca8969e5883144");
+        map.setView();
+        map.setMap("mapDiv");
+        map.bindViewPortMoveEvents();
+        map.bindMouseMoveEvents();
+        map.gpsOn();
+
+        lngInput.onkeypress = function (ev) {
+            if (ev.keyCode === 13) lookAt();
+        };
+        latInput.onkeypress = function (ev) {
+            if (ev.keyCode === 13) lookAt();
+        };
+        levelInput.onkeypress = function (ev) {
+            if (ev.keyCode === 13) lookAt();
+        };
+        moveButton.onclick = function (ev) {
+            lookAt();
+        };
+        labelCheckBox.onclick = function (ev) {
+            map.tiandituAnnotationLayer.setVisible(this.checked);
+        };
+        switchBackgroundLayerButton.onclick = function (ev) {
+            map.switchBackgroundLayerType();
+        };
+        function lookAt() {
+            var lng = parseFloat($("#lngInput").val());
+            var lat = parseFloat($("#latInput").val());
+            var level = parseInt($("#levelInput").val());
+            map.lookAt(lng, lat, level);
+        }
+
+        
+    </script>
+</body>
+
+</html>

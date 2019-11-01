@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible">
+    <title>Document</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+</head>
+
+<body>
+    <p id="coordPara"></p>
+    <button onclick="getLocation()">当前位置</button>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            }
+            else {
+                $("#coordPara").html("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            $("#coordPara").html("Latitude: " + position.coords.latitude +
+                "<br />Longitude: " + position.coords.longitude);
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    $("#coordPara").html("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    $("#coordPara").html("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    $("#coordPara").html("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    $("#coordPara").html("An unknown error occurred.");
+                    break;
+            }
+        }
+    </script>
+</body>
+
+</html>
